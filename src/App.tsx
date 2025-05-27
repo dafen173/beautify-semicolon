@@ -8,11 +8,10 @@ function App() {
 
     invoke('send_projector_command', { cmd })
       .then((response) => console.log("Success:", response))
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => console.error("Error999:", error));
 
       console.log("Command sent:", cmd);
   };
-
 
   return (
     <div className="app">
@@ -20,7 +19,7 @@ function App() {
       <div className="button-grid">
         <button onClick={() => sendCommand("~0000 1")}>Power On</button>
         <button onClick={() => sendCommand("~0000 0&2")}>Power Off</button>
-        <button onClick={() => sendCommand("~~00140 20")}>Menu</button>
+        <button onClick={() => sendCommand("~00140 20")}>Menu</button>
         <button onClick={() => sendCommand("~0012 1")}>HDMI</button>
         <button onClick={() => sendCommand("~0012 5")}>VGA</button>
         <button onClick={() => sendCommand("~0012 10")}>Video</button>
