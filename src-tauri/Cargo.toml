@@ -15,14 +15,24 @@ name = "my_app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2", features = [] }
+tauri-build = { version = "2.2.0", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [] }
-tauri-plugin-opener = "2"
+tauri = { version = "2.2.0", features = [] }  # Must match exactly
+tauri-plugin-opener = "2.2.0"  # Match version
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-serde_yaml = "0.9.34+deprecated"
-serde-xml-rs = "0.6.0"
-serialport = "4.2"  # For RS-232 communication
-tokio = { version = "1", features = ["full"] }  # Async runtime
+serialport = { version = "4.2", default-features = false }
+tokio = { version = "1", features = ["full"] }
+
+[package.metadata.tauri]
+allowlist = { all = true }  # Global allowlist
+
+[package.metadata.tauri.bundle]
+icons = [
+  "icons/32x32.png",
+  "icons/128x128.png",
+  "icons/128x128@2x.png",
+  "icons/icon.icns",
+  "icons/icon.ico"
+]
