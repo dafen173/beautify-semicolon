@@ -29,14 +29,13 @@ jobs:
           toolchain: stable
           target: x86_64-pc-windows-msvc
           override: true
-          components: rust-src, rustfmt, clippy
 
       # 3. Configure linker
       - name: Setup mingw linker
         run: |
+          mkdir -p ~/.cargo
           echo '[target.x86_64-pc-windows-msvc]' >> ~/.cargo/config.toml
           echo 'linker = "x86_64-w64-mingw32-gcc"' >> ~/.cargo/config.toml
-          echo 'ar = "x86_64-w64-mingw32-gcc-ar"' >> ~/.cargo/config.toml
 
       # 4. Install Node.js
       - uses: actions/setup-node@v3
@@ -56,16 +55,11 @@ jobs:
       - name: Build application
         run: |
           yarn tauri build --target x86_64-pc-windows-msvc
-        env:
-          CARGO_TERM_COLOR: always
-          RUST_BACKTRACE: full
 
-      # 7. Upload artifacts
-      - uses: actions/upload-artifact@v3
-        if: success()
+      # 7. Upload artifacts (FIXED VERSION)
+      - uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: |
             src-tauri/target/x86_64-pc-windows-msvc/release/*.exe
             src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
-          retention-days: 5
