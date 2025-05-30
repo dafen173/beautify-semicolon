@@ -18,7 +18,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2.2.0", features = [] }
 
 [dependencies]
-tauri = { version = "2.2.0", features = [] }  # Must match exactly
+tauri = { version = "2.5.1", features = [] }
 tauri-plugin-opener = "2.2.0"  # Match version
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -36,3 +36,6 @@ icons = [
   "icons/icon.icns",
   "icons/icon.ico"
 ]
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["winuser"] }
