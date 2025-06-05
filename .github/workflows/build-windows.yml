@@ -10,30 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Ensure all files are checked out
 
-      # 1. Verify repository structure
-      - name: Verify repository structure
-        run: |
-          echo "Repository root contents:"
-          ls -la
-          echo "src-tauri contents:"
-          ls -la src-tauri/
-          echo "Icons directory contents:"
-          ls -la src-tauri/icons/
-
-      # 2. Verify icons exist (with better error messages)
+      # 1. Verify icons exist
       - name: Check icon files
         run: |
-          if [ ! -f src-tauri/icons/32x32.png ]; then echo "ERROR: 32x32.png missing"; exit 1; fi
-          if [ ! -f src-tauri/icons/128x128.png ]; then echo "ERROR: 128x128.png missing"; exit 1; fi
-          if [ ! -f src-tauri/icons/128x128@2x.png ]; then echo "ERROR: 128x128@2x.png missing"; exit 1; fi
-          if [ ! -f src-tauri/icons/icon.icns ]; then echo "ERROR: icon.icns missing"; exit 1; fi
-          if [ ! -f src-tauri/icons/icon.ico ]; then echo "ERROR: icon.ico missing"; exit 1; fi
-          echo "All icon files present"
+          ls -la src-tauri/icons/
+          [ -f src-tauri/icons/32x32.png ] || exit 1
+          [ -f src-tauri/icons/128x128.png ] || exit 1
+          [ -f src-tauri/icons/128x128@2x.png ] || exit 1
+          [ -f src-tauri/icons/icon.icns ] || exit 1
+          [ -f src-tauri/icons/icon.ico ] || exit 1
 
-      # 3. Install system dependencies
+      # 2. Install system dependencies
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -47,29 +35,29 @@ jobs:
             libgtk-3-dev \
             libwebkit2gtk-4.1-dev
 
-      # 4. Setup Rust toolchain
+      # 3. Setup Rust toolchain
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: x86_64-pc-windows-msvc
+          target: x86_64-pc-windows-gnu  # Changed from msvc to gnu
           override: true
           components: rust-src, rustfmt, clippy
 
-      # 5. Configure mingw linker
+      # 4. Configure mingw linker
       - name: Setup mingw linker
         run: |
           mkdir -p ~/.cargo
-          echo '[target.x86_64-pc-windows-msvc]' >> ~/.cargo/config.toml
+          echo '[target.x86_64-pc-windows-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "x86_64-w64-mingw32-gcc"' >> ~/.cargo/config.toml
           echo 'ar = "x86_64-w64-mingw32-gcc-ar"' >> ~/.cargo/config.toml
 
-      # 6. Setup Node.js
+      # 5. Setup Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'yarn'
 
-      # 7. Install project dependencies
+      # 6. Install project dependencies
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile
@@ -77,27 +65,19 @@ jobs:
           cargo generate-lockfile
           cd ..
 
-      # 8. Build with maximum verbosity
+      # 7. Build with verbose output
       - name: Build application
-        env:
-          CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG: true
-          RUST_BACKTRACE: full
         run: |
-          echo "Building from directory: $(pwd)"
-          ls -la src-tauri/icons/
-          
           cd src-tauri
-          cargo build --release --target x86_64-pc-windows-msvc --verbose
+          RUST_BACKTRACE=full cargo build --release --target x86_64-pc-windows-gnu --verbose
           cd ..
-          
-          yarn tauri build --target x86_64-pc-windows-msvc --verbose
+          yarn tauri build --target x86_64-pc-windows-gnu --verbose
 
-      # 9. Upload artifacts
+      # 8. Upload artifacts
       - uses: actions/upload-artifact@v4
-        if: success()
         with:
           name: windows-build
           path: |
-            src-tauri/target/x86_64-pc-windows-msvc/release/*.exe
-            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+            src-tauri/target/x86_64-pc-windows-gnu/release/*.exe
+            src-tauri/target/x86_64-pc-windows-gnu/release/bundle/msi/*.msi
           retention-days: 5
