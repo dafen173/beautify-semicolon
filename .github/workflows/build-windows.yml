@@ -2,7 +2,7 @@ name: Build Windows
 
 on:
   push:
-    branches: [main, mvp-ubuntu]
+    branches: [mvp-ubuntu]
   workflow_dispatch:
 
 jobs:
@@ -10,6 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # 1. Verify icons exist (optional debug step)
+      - name: Check icon files
+        run: |
+          ls -la src-tauri/icons/
+          [ -f src-tauri/icons/32x32.png ] || exit 1
+          [ -f src-tauri/icons/128x128.png ] || exit 1
+          [ -f src-tauri/icons/128x128@2x.png ] || exit 1
+          [ -f src-tauri/icons/icon.icns ] || exit 1
+          [ -f src-tauri/icons/icon.ico ] || exit 1
 
       # 2. Install system dependencies
       - name: Install dependencies
@@ -25,7 +35,7 @@ jobs:
             libgtk-3-dev \
             libwebkit2gtk-4.0-dev
 
-      # 3. Setup Rust
+      # 3. Setup Rust toolchain
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -33,7 +43,7 @@ jobs:
           override: true
           components: rust-src, rustfmt, clippy
 
-      # 4. Configure linker
+      # 4. Configure mingw linker
       - name: Setup mingw linker
         run: |
           mkdir -p ~/.cargo
@@ -41,22 +51,21 @@ jobs:
           echo 'linker = "x86_64-w64-mingw32-gcc"' >> ~/.cargo/config.toml
           echo 'ar = "x86_64-w64-mingw32-gcc-ar"' >> ~/.cargo/config.toml
 
-      # 5. Install Node.js
+      # 5. Setup Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'yarn'
 
-      # 6. Debug environment
-      - name: Debug Info
+      # 6. Install project dependencies
+      - name: Install dependencies
         run: |
-          ls -la src-tauri/
-          rustc --version
-          cargo --version
-          node --version
-          yarn --version
+          yarn install --frozen-lockfile
+          cd src-tauri
+          cargo generate-lockfile
+          cd ..
 
-      # 7. Build
+      # 7. Build with verbose output
       - name: Build application
         run: |
           cd src-tauri
@@ -71,3 +80,4 @@ jobs:
           path: |
             src-tauri/target/x86_64-pc-windows-msvc/release/*.exe
             src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+          retention-days: 5
