@@ -15,8 +15,8 @@ crate-type = ["cdylib", "rlib"]
 tauri-build = { version = "2.2.0" }
 
 [dependencies]
-tauri = { version = "2.5.1", features = ["shell-execute"] }
-tauri-plugin-shell = "2.0.0"
+tauri = { version = "2.5.1" }  # Removed shell-execute feature
+tauri-plugin-shell = "2.0.0"    # This handles shell operations
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serialport = { version = "4.2", default-features = false }
