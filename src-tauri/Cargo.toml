@@ -15,8 +15,8 @@ crate-type = ["cdylib", "rlib"]
 tauri-build = { version = "2.2.0" }
 
 [dependencies]
-tauri = { version = "2.5.1", features = ["shell-execute"] }  # Changed from shell-open to shell-execute
-tauri-plugin-shell = "2.0.0"  # Added shell plugin
+tauri = { version = "2.5.1", features = ["shell-execute"] }
+tauri-plugin-shell = "2.0.0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serialport = { version = "4.2", default-features = false }
@@ -27,14 +27,7 @@ thiserror = "1.0"
 winapi = { version = "0.3", features = ["winuser"] }
 
 [package.metadata.tauri]
-allowlist = { 
-    all = false,
-    shell = { 
-        all = false,
-        execute = true,  # Changed from open to execute
-        scope = [{ name = "http://localhost*" }]
-    }
-}
+allowlist = { all = false, shell = { all = false, execute = true, scope = [{ name = "http://localhost*" }] } }
 
 [package.metadata.tauri.bundle]
 identifier = "com.myapp.projector"
