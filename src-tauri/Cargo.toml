@@ -12,11 +12,14 @@ name = "my_app_lib"
 crate-type = ["cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.2.0" }
+tauri-build = { version = "2.5.1" }  # Changed from 2.2.0 to match tauri version
+
+
 
 [dependencies]
-tauri = { version = "2.5.1" }  # Removed shell-execute feature
-tauri-plugin-shell = "2.0.0"    # This handles shell operations
+tauri = { version = "2.5.1" }
+tauri-plugin-shell = { version = "2.5.1" }  # Updated to match
+tauri-utils = { version = "2.5.1" }  # Explicitly add this
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serialport = { version = "4.2", default-features = false }
