@@ -29,6 +29,10 @@ winapi = { version = "0.3", features = ["winuser"] }
 [package.metadata.tauri]
 allowlist = { all = false, shell = { all = false, execute = true, scope = [{ name = "http://localhost*" }] } }
 
+[package.metadata.tauri.permissions]
+core = ["default"]
+app = ["default"]
+
 [package.metadata.tauri.bundle]
 identifier = "com.myapp.projector"
 copyright = "© 2023 My App"
