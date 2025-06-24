@@ -22,19 +22,11 @@ serialport = { version = "4.2", default-features = false }
 tokio = { version = "1", features = ["full"] }
 thiserror = "1.0"
 
-# Windows-specific dependencies
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winuser"] }
 
 [package.metadata.tauri]
-allowlist = { 
-    all = false,
-    shell = {
-        all = false,
-        execute = true,
-        scope = [{ name = "http://localhost*" }]
-    }
-}
+allowlist = { all = false, shell = { all = false, execute = true, scope = [{ name = "http://localhost*" }] } }
 
 [package.metadata.tauri.permissions]
 core = ["default"]
