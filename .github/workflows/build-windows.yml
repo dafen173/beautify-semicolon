@@ -63,7 +63,9 @@ jobs:
       # 6. Clean and install dependencies
       - name: Install dependencies
         run: |
+          cd src-tauri
           cargo clean
+          cd ..
           yarn install --frozen-lockfile
           cd src-tauri
           cargo generate-lockfile

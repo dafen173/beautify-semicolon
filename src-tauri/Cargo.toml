@@ -14,8 +14,6 @@ crate-type = ["cdylib", "rlib"]
 [build-dependencies]
 tauri-build = { version = "2.5.1" }  # Changed from 2.2.0 to match tauri version
 
-
-
 [dependencies]
 tauri = { version = "2.5.1" }
 tauri-plugin-shell = { version = "2.5.1" }  # Updated to match
