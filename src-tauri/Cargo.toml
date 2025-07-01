@@ -5,42 +5,28 @@ description = "A Tauri App for Optoma Projector Control"
 authors = ["you"]
 edition = "2021"
 license = "MIT"
-repository = ""
-
-[lib]
-name = "my_app_lib"
-crate-type = ["cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "1.5.0" }  # Latest stable build dependency
+tauri-build = { version = "1.5.2" }
 
 [dependencies]
-tauri = { version = "1.5.0" }  # Matching main crate version
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+tauri = { version = "1.5.2" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 serialport = { version = "4.2", default-features = false }
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1.0", features = ["full"] }
 thiserror = "1.0"
 
-[target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3", features = ["winuser"] }
-
 [package.metadata.tauri]
-allowlist = { all = false, shell = { all = false, open = true, scope = [{ name = "http://localhost*" }] } }
-
-[package.metadata.tauri.permissions]
-core = ["default"]
-app = ["default"]
-
-[package.metadata.tauri.bundle]
-identifier = "com.myapp.projector"
-copyright = "© 2023 My App"
-category = "Utility"
-icons = [
-  "icons/32x32.png",
-  "icons/128x128.png",
-  "icons/128x128@2x.png",
-  "icons/icon.icns",
-  "icons/icon.ico"
-]
-resources = ["icons"]
+bundle = {
+    identifier = "com.myapp.projector",
+    copyright = "© 2023 My App",
+    category = "Utility",
+    icons = [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+    ]
+}
