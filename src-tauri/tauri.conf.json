@@ -1,25 +1,13 @@
 {
   "$schema": "https://schema.tauri.app/config/2.0.0",
-  "productName": "my-app",
-  "version": "0.1.0",
-  "identifier": "com.myapp.projector",
   "build": {
     "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
     "frontendDist": "../dist"
   },
-  "app": {
-    "windows": [
-      {
-        "title": "my-app",
-        "width": 800,
-        "height": 600
-      }
-    ],
-    "security": {
-      "csp": null
-    }
-  },
+  "productName": "my-app",
+  "version": "0.1.0",
+  "identifier": "com.myapp.projector",
   "bundle": {
     "active": true,
     "targets": [
@@ -40,5 +28,17 @@
     "resources": [
       "icons/**"
     ]
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "my-app",
+        "width": 800,
+        "height": 600
+      }
+    ],
+    "security": {
+      "csp": null
+    }
   }
 }

@@ -61,7 +61,7 @@ jobs:
           cd ..
           yarn install --frozen-lockfile
           cd src-tauri
-          cargo generate-lockfile
+          cargo update
           cd ..
 
       # 7. Build with verbose output
