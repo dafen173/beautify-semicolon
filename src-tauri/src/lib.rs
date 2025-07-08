@@ -1,6 +1,5 @@
-use serialport::{SerialPort, SerialPortBuilder};
+use serialport::SerialPort;
 use std::time::Duration;
-use tauri::command;
 
 fn open_serial_port() -> Result<Box<dyn SerialPort>, String> {
     serialport::new("/dev/ttyUSB0", 9600) // Adjust port for your OS ('COM3' - for Windows; '/dev/ttyUSB0' - for Linux)
