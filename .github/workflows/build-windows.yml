@@ -25,13 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            libudev-dev \
-            libusb-1.0-0-dev \
-            pkg-config \
-            libssl-dev \
-            mingw-w64 \
-            gcc-mingw-w64-x86-64
+          sudo apt-get install -y             libudev-dev             libusb-1.0-0-dev             pkg-config             libssl-dev             mingw-w64             gcc-mingw-w64-x86-64             wixl
 
       # 3. Setup Rust toolchain
       - uses: dtolnay/rust-toolchain@stable
