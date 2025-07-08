@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-windows:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -21,33 +21,18 @@ jobs:
           [ -f src-tauri/icons/icon.icns ] || exit 1
           [ -f src-tauri/icons/icon.ico ] || exit 1
 
-      # 2. Install system dependencies
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y             libudev-dev             libusb-1.0-0-dev             pkg-config             libssl-dev             mingw-w64             gcc-mingw-w64-x86-64             wixl
-
-      # 3. Setup Rust toolchain
+      # 2. Setup Rust toolchain
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: x86_64-pc-windows-gnu
           components: rust-src, rustfmt, clippy
 
-      # 4. Configure mingw linker
-      - name: Setup mingw linker
-        run: |
-          mkdir -p ~/.cargo
-          echo '[target.x86_64-pc-windows-gnu]' > ~/.cargo/config.toml
-          echo 'linker = "x86_64-w64-mingw32-gcc"' >> ~/.cargo/config.toml
-          echo 'ar = "x86_64-w64-mingw32-gcc-ar"' >> ~/.cargo/config.toml
-
-      # 5. Setup Node.js
+      # 3. Setup Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
 
-      # 6. Clean and install dependencies
+      # 4. Clean and install dependencies
       - name: Install dependencies
         run: |
           cd src-tauri
@@ -58,18 +43,18 @@ jobs:
           cargo update
           cd ..
 
-      # 7. Build with verbose output
+      # 5. Build with verbose output
       - name: Build application
         env:
           CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG: "true"
         run: |
-          npm run tauri -- build --target x86_64-pc-windows-gnu --verbose
+          npm run tauri -- build --verbose
 
-      # 8. Upload artifacts
+      # 6. Upload artifacts
       - uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: |
-            src-tauri/target/x86_64-pc-windows-gnu/release/*.exe
-            src-tauri/target/x86_64-pc-windows-gnu/release/bundle/msi/*.msi
+            src-tauri/target/release/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
           retention-days: 5
